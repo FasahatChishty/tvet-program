@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+body{background:linear-gradient(180deg,#f8fafc 0%,#eef4ff 100%);color:#0f172a;}
+.main-header{background:#0f172a;color:#fff;box-shadow:0 10px 24px rgba(15,23,42,.18);}
+.main-header .logo,.main-header a{color:#fff;}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 20px;color:#0f172a;}
+.wrap h1{color:#0f172a;margin:0 0 22px;}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;}
+.card{background:#ffffff;border-radius:20px;padding:24px;box-shadow:0 12px 30px rgba(15,23,42,.08);text-decoration:none;color:#0f172a;display:block;border:1px solid #e2e8f0;transition:transform .15s ease, box-shadow .15s ease;}
+.card:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(15,23,42,.12);}
+.card h3{margin:0 0 8px;color:#0f172a;}
+.card p{margin:0;color:#475569;}
+</style>
+</head>
+<body>
+<header class="main-header">
+  <div class="logo">TVET Admin</div>
+  <nav>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </nav>
+</header>
+<main class="wrap">
+  <h1>Admin Dashboard</h1>
+  <div class="card-grid">
+    <a class="card" href="{{ url_for('admin_users') }}"><h3>Users</h3><p>View registered users.</p></a>
+    <a class="card" href="{{ url_for('admin_results') }}"><h3>Results</h3><p>Review saved assessment results.</p></a>
+    <a class="card" href="{{ url_for('admin_questions') }}"><h3>Questions</h3><p>Manage questionnaire items.</p></a>
+    <a class="card" href="{{ url_for('admin_settings') }}"><h3>Settings</h3><p>Enable or disable assessments and set timer length.</p></a>
+  </div>
+</main>
+</body>
+</html>

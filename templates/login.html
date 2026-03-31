@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TVET Login</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+
+<body>
+
+<header class="main-header">
+    <div class="logo">TVET Program</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="/test">Test</a>
+    </nav>
+</header>
+
+<div class="bg"></div>
+
+<section class="login-wrapper">
+    <div class="login-card">
+
+        <h2>Login</h2>
+        <p class="subtitle">Enter your details to continue</p>
+
+        <!-- ✅ FIXED FORM -->
+        <form method="POST" action="{{ url_for('login') }}">
+
+            <div class="input-group">
+                <input type="email" name="email" required>
+                <label>Email</label>
+            </div>
+
+            <div class="input-group">
+                <input type="text" name="code" required>
+                <label>Verification Code</label>
+            </div>
+
+            <button type="submit" class="btn">Login</button>
+
+        </form>
+
+    </div>
+</section>
+
+<footer class="main-footer">
+    <p>© 2026 TVET Program | All Rights Reserved</p>
+    <p>Empowering Students Through Skills & Education</p>
+</footer>
+
+<!-- ✅ FLASH -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <script>
+      {% for message in messages %}
+        alert("{{ message }}");
+      {% endfor %}
+    </script>
+  {% endif %}
+{% endwith %}
+
+</body>
+</html>

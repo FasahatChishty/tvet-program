@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Results</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+body{background:linear-gradient(180deg,#f8fafc 0%,#eef4ff 100%);color:#0f172a;}
+.main-header{background:#0f172a;color:#fff;box-shadow:0 10px 24px rgba(15,23,42,.18);}
+.main-header .logo,.main-header a{color:#fff;}
+.wrap{max-width:1100px;margin:0 auto;padding:40px 20px;color:#0f172a;}
+.wrap h1{color:#0f172a;margin:0 0 22px;}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 12px 30px rgba(15,23,42,.08);border:1px solid #e2e8f0;}
+th,td{padding:14px 16px;text-align:left;border-bottom:1px solid #e5e7eb;vertical-align:top;color:#0f172a;}
+th{background:#f8fafc;color:#0f172a;}
+</style>
+</head>
+<body>
+<header class="main-header">
+  <div class="logo">TVET Admin</div>
+  <nav>
+    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('admin_users') }}">Users</a>
+    <a href="{{ url_for('admin_questions') }}">Questions</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </nav>
+</header>
+<main class="wrap">
+  <h1>Results</h1>
+  <table>
+    <thead><tr><th>Email</th><th>Score</th><th>Label</th><th>Timestamp</th></tr></thead>
+    <tbody>
+      {% for row in results %}
+      <tr>
+        <td>{{ row.get('email', '') }}</td>
+        <td>{{ row.get('score', '') | round(1) }}%</td>
+        <td>{{ row.get('label', '') }}</td>
+        <td>{{ row.get('timestamp') or 'N/A' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</main>
+</body>
+</html>

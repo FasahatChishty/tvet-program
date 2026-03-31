@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TVET Assessment</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+body{background:linear-gradient(180deg,#f4f7fb 0%,#eef4ff 100%);}
+.assessment-shell{max-width:1040px;margin:0 auto;padding:32px 20px 56px;}
+.assessment-card{background:#fff;border-radius:28px;padding:28px;box-shadow:0 20px 60px rgba(15,23,42,.12);}
+.assessment-header{margin-bottom:28px;text-align:center;}
+.assessment-header h1{margin:0 0 10px;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:#111827;}
+.assessment-header p{margin:0;color:#6b7280;line-height:1.6;}
+.progress-wrap{margin:6px 0 24px;}
+.progress-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px;font-size:.95rem;color:#4b5563;font-weight:600;}
+.progress-bar{height:10px;border-radius:999px;background:#e5e7eb;overflow:hidden;}
+.progress-fill{width:100%;height:100%;background:linear-gradient(90deg,#2563eb 0%,#7c3aed 100%);}
+#timer-box {
+    position: sticky;
+    top: 10px;
+    background: #111827;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    z-index: 10;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+}
+.domain-card{border:1px solid #e5e7eb;border-radius:24px;padding:24px;margin-bottom:18px;background:linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);box-shadow:0 12px 30px rgba(15,23,42,.06);transition:transform .15s ease, box-shadow .15s ease;}
+.domain-card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(15,23,42,.09);}
+.domain-title{margin:0 0 18px;font-size:1.2rem;font-weight:800;color:#111827;letter-spacing:.02em;}
+.question{padding:16px 0;border-top:1px solid #e5e7eb;}
+.question:first-of-type{border-top:0;padding-top:0;}
+.question-text{margin:0 0 14px;font-weight:700;color:#1f2937;line-height:1.5;font-size:1rem;}
+.options{display:flex;flex-wrap:wrap;gap:10px;}
+.option{display:inline-flex;align-items:center;gap:8px;padding:11px 14px;border:1px solid #d1d5db;border-radius:999px;background:#fff;cursor:pointer;transition:all .15s ease;box-shadow:0 1px 2px rgba(0,0,0,.03);}
+.option:hover{border-color:#93c5fd;box-shadow:0 8px 20px rgba(37,99,235,.08);transform:translateY(-1px);}
+.option input{accent-color:#111827;margin:0;}
+.option span{font-size:.95rem;color:#374151;white-space:nowrap;}
+.submit-row{display:flex;justify-content:center;margin-top:28px;}
+.submit-btn{border:0;border-radius:16px;padding:15px 32px;background:linear-gradient(90deg,#111827 0%,#334155 100%);color:#fff;font-weight:800;cursor:pointer;min-width:220px;box-shadow:0 14px 30px rgba(15,23,42,.18);transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;}
+.submit-btn:hover{transform:translateY(-1px);box-shadow:0 18px 36px rgba(15,23,42,.22);}
+@media (min-width: 760px){
+  .option{padding:12px 16px;}
+}
+</style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="logo">TVET Program</div>
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('test') }}">Test</a>
+        <a href="{{ url_for('result') }}">Result</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% if session.get("user_email") in ["admin@tvet.com", "sherankhanasim@gmail.com"] %}
+            <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main class="assessment-shell">
+    <section class="assessment-card">
+        <div class="assessment-header">
+            {% if test_type == "FYP" %}
+                <h1>FYP Assessment</h1>
+            {% else %}
+                <h1>Job Assessment</h1>
+            {% endif %}
+            <p>Please answer all 28 statements honestly. Use the scale from Strongly Disagree to Strongly Agree.</p>
+        </div>
+
+        <div class="progress-wrap" aria-label="Assessment progress">
+            <div class="progress-top">
+                <span>Section 1 of 7</span>
+                <span>7 domains total</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div id="timer-box">
+          ⏱ Time Left: <span id="time">00:00</span>
+        </div>
+
+        <form method="POST" action="{{ url_for('test') }}">
+            {% set domain_subtitles = {
+                'GOLEK': 'Logical reasoning and structured problem solving',
+                'RIASEC': 'Interest alignment and career identity',
+                'LearningStyle': 'Learning preferences and engagement style',
+                'Verbal': 'Communication and expression',
+                'Strength': 'Endurance and physical confidence',
+                'Technical': 'Technical curiosity and applied skill',
+                'WorkValues': 'Career values and workplace motivation'
+            } %}
+
+            {% for domain, qs in questions.items() %}
+            <div class="domain-card">
+                <h2 class="domain-title">{{ domain }}</h2>
+                <p class="domain-subtitle" style="margin: -10px 0 16px; color:#64748b;">{{ domain_subtitles.get(domain, '') }}</p>
+                {% for question in qs %}
+                <div class="question">
+                    <p class="question-text">{{ question }}</p>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="{{ domain }}_{{ loop.index }}" value="1" required><span>Strongly Disagree</span></label>
+                        <label class="option"><input type="radio" name="{{ domain }}_{{ loop.index }}" value="2"><span>Disagree</span></label>
+                        <label class="option"><input type="radio" name="{{ domain }}_{{ loop.index }}" value="3"><span>Neutral</span></label>
+                        <label class="option"><input type="radio" name="{{ domain }}_{{ loop.index }}" value="4"><span>Agree</span></label>
+                        <label class="option"><input type="radio" name="{{ domain }}_{{ loop.index }}" value="5"><span>Strongly Agree</span></label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <div class="submit-row">
+                <button type="submit" class="submit-btn">Submit Assessment</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const totalQuestions = document.querySelectorAll(".question").length;
+    let timeLeft = totalQuestions * {{ time_per_question }}; // seconds
+
+    const timerDisplay = document.getElementById("time");
+    const form = document.querySelector("form");
+
+    function updateTimer() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+
+        timerDisplay.textContent =
+            String(minutes).padStart(2, '0') + ":" +
+            String(seconds).padStart(2, '0');
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            alert("Time is up! Submitting your test.");
+            form.submit();
+            return;
+        }
+
+        timeLeft--;
+    }
+
+    updateTimer();
+    const timer = setInterval(updateTimer, 1000);
+
+});
+</script>
+
+</body>
+</html>

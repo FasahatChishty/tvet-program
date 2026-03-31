@@ -1,0 +1,91 @@
+{
+  "FYP": {
+    "GOLEK": [
+      "I enjoy solving logical problems and working through structured challenges.",
+      "I prefer tasks that require careful analysis before making a decision.",
+      "I feel motivated when I can identify patterns in information or data.",
+      "I am comfortable breaking a complex issue into smaller, manageable parts.",
+      "I feel I am sometimes confused on what to choose for myself"
+    ],
+    "RIASEC": [
+      "I enjoy exploring careers that match my interests and personal strengths.",
+      "I prefer activities that align with a clear professional identity.",
+      "I am interested in environments where I can develop specialized career preferences.",
+      "I can see myself building a career path based on my interests and talents."
+    ],
+    "LearningStyle": [
+      "I learn best when I can apply concepts in practical situations.",
+      "I prefer learning through examples, demonstrations, or guided practice.",
+      "I stay engaged when learning connects theory to real-world outcomes.",
+      "I remember information better when I actively practice or discuss it."
+    ],
+    "Verbal": [
+      "I can explain my ideas clearly when speaking to others.",
+      "I am comfortable presenting my thoughts in a formal setting.",
+      "I can adapt my language to communicate with different audiences.",
+      "I communicate confidently when I need to explain a process or recommendation."
+    ],
+    "Strength": [
+      "I remain composed when handling demanding or physically challenging tasks.",
+      "I can sustain effort over long periods when a task requires endurance.",
+      "I feel confident performing tasks that require steady physical coordination.",
+      "I can manage tasks that require both discipline and physical presence."
+    ],
+    "Technical": [
+      "I enjoy learning how tools, systems, or devices work.",
+      "I can follow technical instructions carefully and accurately.",
+      "I feel satisfied when I solve practical technical problems.",
+      "I like working with instruments, machinery, or digital tools to complete tasks."
+    ],
+    "WorkValues": [
+      "I value work that offers responsibility and a sense of purpose.",
+      "I prefer career options that support stability and long-term growth.",
+      "I am motivated by work that allows me to contribute meaningfully to others.",
+      "I prefer a work environment where effort and quality are recognized."
+    ]
+  },
+  "JOB": {
+    "GOLEK": [
+      "I enjoy solving practical problems that have immediate workplace value.",
+      "I prefer tasks that require quick but careful analysis under time pressure.",
+      "I feel motivated when information leads directly to action.",
+      "I am comfortable simplifying a work issue into clear steps for execution."
+    ],
+    "RIASEC": [
+      "I enjoy exploring career options that offer clear employment opportunities.",
+      "I prefer activities that match a professional role I can imagine doing full-time.",
+      "I am interested in environments where I can strengthen job-ready skills.",
+      "I can see myself building a career path based on market demand and my strengths."
+    ],
+    "LearningStyle": [
+      "I learn best when training is directly connected to workplace tasks.",
+      "I prefer learning through hands-on examples, demonstrations, or guided practice.",
+      "I stay engaged when training shows clear job relevance.",
+      "I remember information better when I actively practice and repeat it in context."
+    ],
+    "Verbal": [
+      "I can explain my ideas clearly in workplace conversations.",
+      "I am comfortable presenting my thoughts when working with a team.",
+      "I can adapt my language to different workplace situations.",
+      "I communicate confidently when I need to explain a process or update."
+    ],
+    "Strength": [
+      "I remain composed when handling physically active or demanding work tasks.",
+      "I can sustain effort over long periods when work requires endurance.",
+      "I feel confident performing tasks that require steady physical coordination.",
+      "I can manage tasks that require discipline and consistent presence at work."
+    ],
+    "Technical": [
+      "I enjoy learning how tools, systems, or devices are used in real work settings.",
+      "I can follow technical instructions carefully and accurately.",
+      "I feel satisfied when I solve practical technical problems on the job.",
+      "I like working with instruments, machinery, or digital tools to complete tasks."
+    ],
+    "WorkValues": [
+      "I value work that offers responsibility and a sense of purpose.",
+      "I prefer career options that support stability and long-term growth.",
+      "I am motivated by work that allows me to contribute meaningfully to others.",
+      "I prefer a work environment where effort and quality are recognized."
+    ]
+  }
+}

@@ -1,0 +1,121 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║          QUICK EMAIL SETUP GUIDE - GMAIL                                        ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+WHY YOU'RE NOT RECEIVING EMAILS:
+─────────────────────────────────────────────────────────────────────────────────
+The system is configured to send test scores via email, but the credentials 
+(email and password) are still set to placeholder values.
+
+This is a 2-minute setup process!
+
+
+STEP-BY-STEP SETUP:
+═════════════════════════════════════════════════════════════════════════════════
+
+1️⃣  ENABLE 2-STEP VERIFICATION (1 minute)
+    ─────────────────────────────────────────
+    a) Go to: https://myaccount.google.com/
+    b) Click "Security" on the left sidebar
+    c) Find "2-Step Verification" and click it
+    d) Click "Get Started" and follow the steps
+    e) Verify with your phone when prompted
+
+
+2️⃣  GENERATE APP PASSWORD (1 minute)
+    ─────────────────────────────────────────
+    a) Go to: https://myaccount.google.com/apppasswords
+    b) Select: "Mail" (dropdown)
+    c) Select: "Windows Computer" (dropdown)
+    d) Click "Generate"
+    e) Google shows a 16-character password
+    f) Copy it (excluding spaces)
+       Example: xyzq wvtu bcde fghi → xyzqwvtubcdefghi
+
+
+3️⃣  UPDATE CONFIGURATION (1 minute)
+    ─────────────────────────────────────────
+    a) Open: backend/backend_logic.py
+    b) Go to LINE 15-16
+    c) Find these lines:
+       
+       EMAIL_USER = os.environ.get("EMAIL_USER", "your-email@gmail.com")
+       EMAIL_PASS = os.environ.get("EMAIL_PASS", "your-app-password")
+    
+    d) Replace with YOUR credentials:
+       
+       EMAIL_USER = os.environ.get("EMAIL_USER", "your_actual_email@gmail.com")
+       EMAIL_PASS = os.environ.get("EMAIL_PASS", "xyzqwvtubcdefghi")
+    
+    e) Save the file (Ctrl+S)
+
+
+4️⃣  TEST YOUR CONFIGURATION
+    ─────────────────────────────────────────
+    a) Run: python test_backend.py
+    b) In the menu, select: "5. Email Configuration Help"
+    c) Select: "2. Test Email Configuration"
+    d) Enter your email address
+    e) Check your inbox (and spam folder)
+    
+    If successful:
+    ✅ You'll see: "Results emailed successfully to..."
+    ✅ You'll receive a test email within 30 seconds
+    
+    If it fails:
+    ❌ Read the error message - it will tell you what's wrong
+
+
+TROUBLESHOOTING:
+═════════════════════════════════════════════════════════════════════════════════
+
+❌ Error: "Application-specific password required"
+   → You skipped Step 1 (2-Step Verification)
+   → Enable 2-Step Verification first
+
+❌ Error: "Invalid login"
+   → Your email or app password is wrong
+   → Copy the 16-char password EXACTLY (without spaces)
+
+❌ Email not received after successful send
+   → Check your SPAM folder
+   → Gmail often puts automated emails there initially
+   → You can mark it as "Not Spam" to fix this
+
+❌ Still having issues?
+   → Try using a "less secure app password" (older Gmail accounts)
+   → Or use a different email provider (see EMAIL_CONFIG.txt)
+
+
+ONCE CONFIGURED:
+═════════════════════════════════════════════════════════════════════════════════
+
+Every student who completes a test will automatically receive:
+
+📧 Email Contents:
+   - Personalized greeting
+   - Score breakdown for each domain
+   - TVET Index with interpretation
+   - Recommended career path (FYP vs JOB)
+   - Technical domain recommendations
+   - Anti-cheating analysis results
+
+✅ This happens automatically after test completion!
+
+
+ALTERNATIVE: ENVIRONMENT VARIABLES
+═════════════════════════════════════════════════════════════════════════════════
+
+Instead of editing backend_logic.py, you can set Windows environment variables:
+
+PowerShell (as Administrator):
+────────────────────────────────────────────────────────────────
+[Environment]::SetEnvironmentVariable("EMAIL_USER","your-email@gmail.com","User")
+[Environment]::SetEnvironmentVariable("EMAIL_PASS","your-16-char-password","User")
+
+Then restart PowerShell and run the system.
+
+
+═════════════════════════════════════════════════════════════════════════════════
+Last Updated: March 11, 2026
+For more details, see: EMAIL_CONFIG.txt

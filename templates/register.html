@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TVET Register</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+</head>
+
+<body>
+
+<header class="main-header">
+    <div class="logo">TVET Program</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="/test">Test</a>
+    </nav>
+</header>
+
+<div class="bg"></div>
+
+<section class="register-wrapper">
+
+    <div class="register-card">
+
+        <h2>Create Account</h2>
+        <p class="subtitle">Start your TVET journey today</p>
+
+        <!-- ✅ FIXED FORM -->
+        <form id="registerForm" method="POST" action="{{ url_for('register') }}">
+
+            <div class="input-group">
+                <input type="text" id="name" name="name" required>
+                <label>Full Name</label>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="roll" name="roll" required>
+                <label>Roll Number (2022F-BSE-250)</label>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" required>
+                <label>Email</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" name="password" required>
+                <label>Password</label>
+            </div>
+
+            <button id="registerBtn" type="submit" class="btn">Register Now</button>
+
+        </form>
+
+    </div>
+
+</section>
+
+<footer class="main-footer">
+    <p>© 2026 TVET Program | All Rights Reserved</p>
+    <p>Empowering Students Through Skills & Education</p>
+</footer>
+
+<!-- ✅ FLASH (SAFE) -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <script>
+      {% for message in messages %}
+        alert("{{ message }}");
+      {% endfor %}
+    </script>
+  {% endif %}
+{% endwith %}
+
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+
+</body>
+</html>

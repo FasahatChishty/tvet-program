@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TVET Result</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+:root{
+    --bg1:#eef4ff;
+    --bg2:#f8fafc;
+    --text:#0f172a;
+    --muted:#64748b;
+    --card:#ffffff;
+    --line:#e2e8f0;
+}
+body{
+    background: radial-gradient(circle at top, #ffffff 0%, var(--bg1) 38%, var(--bg2) 100%);
+    color:var(--text);
+}
+.result-shell{
+    min-height: calc(100vh - 80px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px 56px;
+}
+.result-wrap{
+    width:min(100%, 1080px);
+    display:grid;
+    gap:20px;
+}
+.hero-card,
+.section-card,
+.info-card{
+    background:rgba(255,255,255,.92);
+    border:1px solid rgba(226,232,240,.9);
+    border-radius:28px;
+    box-shadow:0 20px 60px rgba(15,23,42,.10);
+    backdrop-filter: blur(8px);
+}
+.hero-card{
+    padding:34px 28px;
+    text-align:center;
+}
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 14px;
+    border-radius:999px;
+    background:#eff6ff;
+    color:#1d4ed8;
+    font-weight:700;
+    font-size:.9rem;
+    margin-bottom:16px;
+}
+.result-title{
+    margin:0 0 10px;
+    font-size:clamp(1.9rem, 4vw, 2.8rem);
+    font-weight:900;
+    letter-spacing:-.03em;
+}
+.result-subtitle{
+    margin:0 auto 28px;
+    max-width:720px;
+    color:var(--muted);
+    line-height:1.7;
+    font-size:1.02rem;
+}
+.score-stack{
+    display:grid;
+    gap:14px;
+    justify-items:center;
+}
+.score-label{
+    font-size:clamp(3.2rem, 8vw, 5.4rem);
+    font-weight:900;
+    line-height:1;
+    letter-spacing:-.05em;
+    color:var(--text);
+}
+.score-subtitle{
+    font-size:1rem;
+    color:var(--muted);
+    margin-top:-4px;
+}
+.badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:12px 20px;
+    border-radius:999px;
+    font-size:1rem;
+    font-weight:800;
+    margin-top:4px;
+}
+.badge.strong{background:#dcfce7;color:#166534;}
+.badge.moderate{background:#ffedd5;color:#9a3412;}
+.badge.low{background:#fee2e2;color:#991b1b;}
+.grid{
+    display:grid;
+    gap:20px;
+}
+.section-card,
+.info-card{
+    padding:26px;
+}
+.section-title{
+    margin:0 0 18px;
+    font-size:1.15rem;
+    font-weight:800;
+    letter-spacing:.02em;
+}
+.domain-list{
+    display:grid;
+    gap:16px;
+}
+.domain-item{
+    display:grid;
+    gap:8px;
+}
+.domain-top{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    align-items:center;
+    font-size:.95rem;
+    font-weight:700;
+}
+.domain-name{color:#1f2937;}
+.domain-value{color:#475569;}
+.bar{
+    height:12px;
+    background:#e2e8f0;
+    border-radius:999px;
+    overflow:hidden;
+}
+.bar-fill{
+    height:100%;
+    border-radius:999px;
+    background:linear-gradient(90deg,#2563eb 0%,#7c3aed 100%);
+    box-shadow:0 8px 18px rgba(37,99,235,.22);
+}
+.bar-fill.go{background:linear-gradient(90deg,#0ea5e9 0%,#2563eb 100%);}
+.bar-fill.ri{background:linear-gradient(90deg,#7c3aed 0%,#a855f7 100%);}
+.bar-fill.ls{background:linear-gradient(90deg,#10b981 0%,#14b8a6 100%);}
+.bar-fill.ve{background:linear-gradient(90deg,#f59e0b 0%,#f97316 100%);}
+.bar-fill.st{background:linear-gradient(90deg,#ef4444 0%,#f97316 100%);}
+.bar-fill.te{background:linear-gradient(90deg,#6366f1 0%,#8b5cf6 100%);}
+.bar-fill.wo{background:linear-gradient(90deg,#14b8a6 0%,#06b6d4 100%);}
+.two-col{
+    display:grid;
+    gap:20px;
+}
+.interpretation{
+    background:linear-gradient(180deg,#f8fafc 0%,#f1f5f9 100%);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:22px;
+    line-height:1.7;
+    color:#334155;
+}
+.interpretation strong{color:#0f172a;}
+.recommend-list{
+    margin:10px 0 0;
+    padding-left:18px;
+    color:#334155;
+    line-height:1.8;
+}
+.suggestions-box{
+    display:grid;
+    gap:12px;
+    background:linear-gradient(180deg,#f8fafc 0%,#eef4ff 100%);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:22px;
+    line-height:1.7;
+}
+.suggestions-box h3{
+    margin:0;
+    font-size:1.05rem;
+    font-weight:800;
+    color:#0f172a;
+}
+.strengths-list{
+    color:#166534;
+}
+.weaknesses-list{
+    color:#9a3412;
+}
+.strengths-empty{
+    margin:0;
+    color:#166534;
+    background:#ecfdf5;
+    border:1px solid #bbf7d0;
+    border-radius:14px;
+    padding:12px 14px;
+}
+.weaknesses-empty{
+    margin:0;
+    color:#9a3412;
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    border-radius:14px;
+    padding:12px 14px;
+}
+.suggestions-box ul{
+    margin:0 0 6px;
+    padding-left:18px;
+}
+.actions{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:4px;
+}
+.action-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:190px;
+    padding:15px 24px;
+    border-radius:16px;
+    text-decoration:none;
+    font-weight:800;
+    transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+.action-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 12px 26px rgba(15,23,42,.12);
+}
+.action-btn.primary{
+    background:linear-gradient(90deg,#111827 0%,#334155 100%);
+    color:#fff;
+}
+.action-btn.secondary{
+    background:#e2e8f0;
+    color:#0f172a;
+}
+@media (min-width: 920px){
+    .two-col{grid-template-columns:1.3fr .9fr;}
+}
+@media (max-width: 640px){
+    .hero-card,.section-card,.info-card{padding:22px 18px;}
+    .action-btn{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="logo">TVET Program</div>
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('test') }}">Test</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% if session.get("user_email") in ["admin@tvet.com", "sherankhanasim@gmail.com"] %}
+            <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+        {% endif %}
+    </nav>
+</header>
+
+{% set label_class = 'strong' if label == 'Strong' else 'moderate' if label == 'Moderate' else 'low' %}
+{% set interpretation = 'You have a strong alignment with technical and career-oriented domains, showing readiness for structured, skill-based pathways.' if label == 'Strong' else 'You show a balanced profile with potential across multiple areas, giving you flexibility in choosing a suitable path.' if label == 'Moderate' else 'You may need further exploration to identify the environment and career direction that fits your strengths best.' %}
+{% set recommendation = ['Technical careers', 'Skill-based roles', 'Vocational training paths'] if label == 'Strong' else ['Balanced career pathways', 'Hybrid academic + skill routes', 'Exploration of multiple domains'] if label == 'Moderate' else ['Career counseling', 'Interest exploration', 'Foundation skill-building'] %}
+
+<main class="result-shell">
+    <div class="result-wrap">
+        <section class="hero-card">
+            <div class="eyebrow">Assessment Complete</div>
+            <h1 class="result-title">Your TVET Result</h1>
+            <p class="result-subtitle">A premium summary of your overall alignment, domain profile, and suggested direction based on your questionnaire responses.</p>
+
+            <div class="score-stack">
+                <div class="score-subtitle">Overall TVET Compatibility Score</div>
+                <div class="score-label">{{ tvet_index }}</div>
+                <div class="badge {{ label_class }}">{{ label }}</div>
+            </div>
+        </section>
+
+        <div class="two-col">
+            <section class="section-card">
+                <h2 class="section-title">Domain Breakdown</h2>
+                <div class="domain-list">
+                    {% set domain_items = [
+                        ('GOLEK', 'go'),
+                        ('RIASEC', 'ri'),
+                        ('LearningStyle', 'ls'),
+                        ('Verbal', 've'),
+                        ('Strength', 'st'),
+                        ('Technical', 'te'),
+                        ('WorkValues', 'wo')
+                    ] %}
+                    {% for name, cls in domain_items %}
+                        {% set value = domains.get(name, 0) %}
+                        {% if value > 75 %}
+                            {% set bar_class = 'go' %}
+                        {% elif value >= 50 %}
+                            {% set bar_class = 've' %}
+                        {% else %}
+                            {% set bar_class = 'st' %}
+                        {% endif %}
+                        <div class="domain-item">
+                            <div class="domain-top">
+                                <span class="domain-name">{{ name }}</span>
+                                <span class="domain-value">{{ value|round(0) }}%</span>
+                            </div>
+                            <div class="bar" aria-label="{{ name }} score {{ value|round(0) }} percent">
+                                <div class="bar-fill {{ bar_class }}" style="width: {{ value }}%;"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <div class="grid">
+                <section class="info-card">
+                    <h2 class="section-title">Interpretation</h2>
+                    <div class="interpretation">
+                        {{ interpretation }}
+                    </div>
+                </section>
+
+                <section class="info-card">
+                    <h2 class="section-title">Suggested Direction</h2>
+                    <ul class="recommend-list">
+                        {% for item in recommendation %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <section class="info-card">
+                    <div class="suggestions-box">
+                        <h3>Strengths</h3>
+                        {% if strengths %}
+                            <ul class="strengths-list">
+                                {% for s in strengths %}
+                                    <li>{{ s }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="strengths-empty">You currently have no major strengths highlighted here. Keep up the steady progress.</p>
+                        {% endif %}
+
+                        <h3>Areas to Improve</h3>
+                        {% if weaknesses %}
+                            <ul class="weaknesses-list">
+                                {% for w in weaknesses %}
+                                    <li>{{ w }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="weaknesses-empty">You currently have no major weaknesses. Keep up the strong performance.</p>
+                        {% endif %}
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <section class="hero-card" style="padding-top:26px;padding-bottom:26px;">
+            <div class="actions">
+                <a class="action-btn primary" href="{{ url_for('test') }}">Retake Test</a>
+                <a class="action-btn secondary" href="{{ url_for('dashboard') }}">Go to Dashboard</a>
+                <a class="action-btn secondary" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

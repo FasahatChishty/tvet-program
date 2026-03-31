@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TVET Program</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        :root{
+            --bg1:#050816;
+            --bg2:#0f172a;
+            --bg3:#111827;
+            --text:#e5e7eb;
+            --muted:#94a3b8;
+            --card:#0b1220;
+            --line:rgba(148,163,184,.18);
+            --accent:#7c3aed;
+            --accent2:#22d3ee;
+        }
+        *{box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{
+            margin:0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color:var(--text);
+            background:
+                radial-gradient(circle at 20% 20%, rgba(124,58,237,.22), transparent 30%),
+                radial-gradient(circle at 80% 10%, rgba(34,211,238,.18), transparent 25%),
+                linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 45%, #0b1220 100%);
+        }
+        a{text-decoration:none;color:inherit}
+        .main-header{
+            position:sticky;
+            top:0;
+            z-index:50;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:20px;
+            padding:18px 28px;
+            background:rgba(5,8,22,.72);
+            border-bottom:1px solid rgba(148,163,184,.14);
+            backdrop-filter:blur(16px);
+        }
+        .logo{
+            font-size:1.2rem;
+            font-weight:900;
+            letter-spacing:.04em;
+            color:#fff;
+        }
+        .main-header nav{
+            display:flex;
+            align-items:center;
+            gap:26px;
+            flex-wrap:wrap;
+        }
+        .main-header nav a{
+            position:relative;
+            color:#e2e8f0;
+            font-weight:700;
+            padding:6px 0;
+        }
+        .main-header nav a::after{
+            content:"";
+            position:absolute;
+            left:0;
+            bottom:-3px;
+            width:100%;
+            height:2px;
+            background:linear-gradient(90deg,var(--accent2),var(--accent));
+            transform:scaleX(0);
+            transform-origin:left;
+            transition:transform .2s ease;
+        }
+        .main-header nav a:hover::after{transform:scaleX(1)}
+        .hero{
+            width:100%;
+            min-height:100vh;
+            margin:0;
+            padding:0 20px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            position:relative;
+            overflow:hidden;
+            background:url('/static/bg.jpg') no-repeat center center;
+            background-size:cover;
+        }
+        .hero::before{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:
+                radial-gradient(circle at center, rgba(255,255,255,0.05), transparent 60%),
+                linear-gradient(135deg, rgba(0,0,0,0.7), rgba(10,15,40,0.85));
+            z-index:0;
+        }
+        .hero-inner{
+            width:100%;
+            max-width:none;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:26px;
+            position:relative;
+            z-index:1;
+            margin:0;
+        }
+        .hero-copy{
+            padding:18px 0;
+        }
+        .eyebrow{
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:10px 14px;
+            border:1px solid rgba(148,163,184,.18);
+            border-radius:999px;
+            background:rgba(15,23,42,.6);
+            color:#cbd5e1;
+            font-size:.92rem;
+            font-weight:700;
+            margin-bottom:18px;
+        }
+        .hero h1{
+            margin:0 0 16px;
+            font-size:clamp(2.8rem, 6vw, 5.8rem);
+            line-height:1.02;
+            letter-spacing:-.05em;
+            font-weight:1000;
+            max-width:12ch;
+            color:#fff;
+            text-shadow:0 8px 28px rgba(0,0,0,.55);
+        }
+        .glow{
+            background:linear-gradient(90deg,#ffffff 0%, #c4b5fd 45%, #22d3ee 100%);
+            -webkit-background-clip:text;
+            background-clip:text;
+            color:transparent;
+            text-shadow:0 0 24px rgba(124,58,237,.12);
+        }
+        .hero p{
+            margin:0 0 30px;
+            max-width:640px;
+            color:#d1d5db;
+            font-size:1.08rem;
+            line-height:1.8;
+            text-shadow:0 4px 18px rgba(0,0,0,.45);
+        }
+        .hero-actions{
+            display:flex;
+            gap:14px;
+            flex-wrap:wrap;
+        }
+        .btn{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            min-width:160px;
+            padding:14px 22px;
+            border-radius:14px;
+            font-weight:800;
+            transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+        }
+        .btn:hover{transform:translateY(-2px) scale(1.01)}
+        .btn-primary{
+            background:linear-gradient(90deg,var(--accent) 0%, #2563eb 100%);
+            color:#fff;
+            box-shadow:0 16px 40px rgba(124,58,237,.28);
+        }
+        .btn-secondary{
+            background:rgba(15,23,42,.6);
+            border:1px solid rgba(148,163,184,.22);
+            color:#fff;
+        }
+        .hero-panel{
+            background:rgba(255,255,255,.05);
+            border:1px solid rgba(255,255,255,.12);
+            border-radius:28px;
+            padding:26px;
+            box-shadow:0 24px 80px rgba(0,0,0,.35);
+            backdrop-filter:blur(12px);
+            position:relative;
+            z-index:1;
+        }
+        .stat{
+            display:grid;
+            gap:10px;
+            padding:18px 0;
+            border-bottom:1px solid rgba(148,163,184,.14);
+        }
+        .stat:last-child{border-bottom:0}
+        .stat strong{font-size:1.1rem;color:#fff}
+        .stat span{color:var(--muted);line-height:1.6}
+        .section{
+            width:min(1120px,100%);
+            margin:0 auto;
+            padding:80px 20px;
+        }
+        .section-title{
+            margin:0 0 10px;
+            font-size:clamp(1.6rem, 3vw, 2.4rem);
+            font-weight:900;
+            letter-spacing:-.03em;
+            color:#fff;
+            text-shadow:0 8px 24px rgba(0,0,0,.35);
+            text-align:center;
+        }
+        .section-subtext{
+            max-width:650px;
+            margin:0 auto 20px;
+            text-align:center;
+            line-height:1.7;
+            font-size:16px;
+            color:rgba(255,255,255,0.75);
+        }
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(3, minmax(0, 1fr));
+            gap:22px;
+        }
+        .feature-card{
+            background:linear-gradient(180deg, rgba(15,23,42,.84), rgba(11,18,32,.96));
+            border:1px solid rgba(255,255,255,.05);
+            border-radius:16px;
+            padding:28px;
+            min-height:220px;
+            box-shadow:0 18px 50px rgba(0,0,0,.22);
+            transition:all .3s ease;
+            position:relative;
+            overflow:hidden;
+        }
+        .feature-card:hover{
+            transform:translateY(-6px);
+            box-shadow:0 20px 50px rgba(0,0,0,.3);
+            border-color:rgba(255,255,255,.1);
+        }
+        .icon{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            width:54px;
+            height:54px;
+            border-radius:16px;
+            background:linear-gradient(135deg, rgba(124,58,237,.35), rgba(34,211,238,.28));
+            font-size:1.6rem;
+            margin-bottom:18px;
+            box-shadow:0 0 24px rgba(34,211,238,.16);
+        }
+        .feature-card h3{
+            margin:0 0 10px;
+            font-size:1.2rem;
+            color:#fff;
+        }
+        .feature-card p{
+            margin:0;
+            color:#94a3b8;
+            line-height:1.75;
+        }
+        .why-grid{
+            display:grid;
+            grid-template-columns:1.05fr .95fr;
+            gap:20px;
+            align-items:stretch;
+        }
+        .why-list{
+            background:rgba(11,18,32,.95);
+            border:1px solid rgba(148,163,184,.14);
+            border-radius:26px;
+            padding:28px;
+            box-shadow:0 18px 50px rgba(0,0,0,.22);
+        }
+        .why-list ul{
+            margin:18px 0 0;
+            padding-left:18px;
+            color:#cbd5e1;
+            line-height:1.9;
+        }
+        .why-highlight{
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            padding:28px;
+            border-radius:26px;
+            background:linear-gradient(135deg, rgba(124,58,237,.35), rgba(34,211,238,.22));
+            border:1px solid rgba(255,255,255,.12);
+            box-shadow:0 18px 50px rgba(0,0,0,.24);
+        }
+        .why-highlight h3{
+            margin:0 0 12px;
+            color:#fff;
+            font-size:1.5rem;
+        }
+        .why-highlight p{
+            margin:0;
+            color:#eef2ff;
+            line-height:1.8;
+        }
+        .cta{
+            width:min(1120px,100%);
+            margin:0 auto;
+            padding:20px 20px 88px;
+            text-align:center;
+        }
+        .cta-box{
+            background:linear-gradient(135deg, rgba(124,58,237,.28), rgba(34,211,238,.16));
+            border:1px solid rgba(148,163,184,.18);
+            border-radius:30px;
+            padding:40px 24px;
+            box-shadow:0 18px 60px rgba(0,0,0,.22);
+        }
+        .cta h2{
+            margin:0 0 12px;
+            font-size:clamp(2rem, 4vw, 3.2rem);
+            color:#fff;
+            letter-spacing:-.04em;
+        }
+        .cta p{
+            margin:0 0 26px;
+            color:#dbeafe;
+            line-height:1.8;
+        }
+        .main-footer{
+            text-align:center;
+            padding:24px 20px 30px;
+            color:#94a3b8;
+            border-top:1px solid rgba(148,163,184,.12);
+            background:rgba(5,8,22,.72);
+            backdrop-filter:blur(12px);
+        }
+        .main-footer p{
+            margin:6px 0;
+        }
+        .main-footer a{
+            color:#fff;
+            font-weight:700;
+        }
+        @media (max-width: 900px){
+            .hero-inner,.cards,.why-grid{grid-template-columns:1fr}
+            .hero h1{max-width:none}
+            .main-header{padding:16px 18px}
+        }
+        @media (max-width: 640px){
+            .main-header nav{gap:16px}
+            .hero{padding:42px 16px 60px}
+            .section,.cta{padding-left:16px;padding-right:16px}
+            .feature-card,.why-list,.why-highlight,.cta-box{padding:22px}
+            .btn{width:100%}
+        }
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="logo">TVET Program</div>
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('login') }}">Login</a>
+        {% if session.get("user_email") in ["admin@tvet.com", "sherankhanasim@gmail.com"] %}
+            <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-copy">
+                <div class="eyebrow">Smart career guidance for TVET learners</div>
+                <h1><span class="glow">Empower Your Career with Smart Assessment</span></h1>
+                <p>AI-driven career and skill analysis for students and professionals. Discover your strengths, match with pathways, and make confident next-step decisions.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="{{ url_for('register') }}">Get Started</a>
+                    <a class="btn btn-secondary" href="{{ url_for('login') }}">Take Test</a>
+                </div>
+            </div>
+            <aside class="hero-panel">
+                <div class="stat">
+                    <strong>Career Assessment</strong>
+                    <span>Measure aptitude, interests, and readiness through structured evaluation.</span>
+                </div>
+                <div class="stat">
+                    <strong>Skill-Based Training</strong>
+                    <span>Discover pathways that align with practical, job-ready learning goals.</span>
+                </div>
+                <div class="stat">
+                    <strong>Smart Recommendations</strong>
+                    <span>Receive clear next steps based on your assessment profile and performance.</span>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">What We Offer</h2>
+        <p class="section-lead">A focused assessment system designed to help learners identify the right direction with clarity, confidence, and data-backed insights.</p>
+        <div class="cards">
+            <article class="feature-card">
+                <div class="icon">🎯</div>
+                <h3>Career Assessment</h3>
+                <p>Structured questionnaires that map interests, strengths, and preferences into actionable career insights.</p>
+            </article>
+            <article class="feature-card">
+                <div class="icon">🛠️</div>
+                <h3>Skill-Based Training</h3>
+                <p>Highlight pathways built around practical skills, hands-on learning, and real-world job readiness.</p>
+            </article>
+            <article class="feature-card">
+                <div class="icon">✨</div>
+                <h3>Smart Recommendations</h3>
+                <p>Receive guided suggestions that match your profile and help you plan your next move intelligently.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Why Us</h2>
+        <p class="section-lead">We combine modern design, simple assessment flow, and meaningful reporting to make career exploration feel clear and engaging.</p>
+        <div class="why-grid">
+            <div class="why-list">
+                <h3 style="margin:0;color:#fff;font-size:1.4rem;">Built for students and professionals</h3>
+                <ul>
+                    <li>Easy-to-use assessment experience with a clean interface.</li>
+                    <li>Clear results that help you understand your direction quickly.</li>
+                    <li>Focused on practical, skill-centered career planning.</li>
+                    <li>Designed to support better decision-making and confidence.</li>
+                </ul>
+            </div>
+            <div class="why-highlight">
+                <h3>Premium guidance, simple flow</h3>
+                <p>Get a polished assessment experience with actionable insights, attractive visuals, and a smooth path from registration to results.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="cta-box">
+            <h2>Start Your Journey Today</h2>
+            <p>Create your account and begin your assessment in just a few steps.</p>
+            <a class="btn btn-primary" href="{{ url_for('register') }}">Register</a>
+        </div>
+    </section>
+</main>
+
+<footer class="main-footer">
+    <p>© 2026 TVET Program</p>
+    <p>Empowering students through smart assessment and career clarity</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

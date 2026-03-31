@@ -1,0 +1,163 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║          TVET ASSESSMENT SYSTEM - FEATURES & CONFIGURATION                      ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+
+🔐 ANTI-CHEATING FEATURES
+═══════════════════════════════════════════════════════════════════════════════
+
+The system detects suspicious behavior during tests:
+
+1. TOO_FAST Detection:
+   - Flags if test completed in less than 1.2 seconds per question
+   - Indicates possible random/careless answering
+
+2. STRAIGHT_LINING Detection:
+   - Flags if >80% of answers use the same option (A, B, C, D, or E)
+   - Indicates pattern-based guessing rather than genuine responses
+
+3. CHEATING SEVERITY LEVELS:
+   - NONE: Normal test behavior
+   - WARNING: One suspicious pattern detected
+   - CRITICAL: Multiple cheating indicators present
+
+4. DETAILED METRICS PROVIDED:
+   - Total test duration (seconds)
+   - Average time per question
+   - Repeated answer rate (%)
+   - Specific warning flags triggered
+
+Example Output:
+────────────────────────────────────────────────────────────────
+🔒 ANTI-CHEATING ANALYSIS
+==================================================
+Cheating Severity: NONE
+Test Duration: 245.3 seconds
+Avg Time/Question: 12.3 seconds
+Repeated Answer Rate: 25.4%
+────────────────────────────────────────────────────────────────
+
+
+🚀 FYP vs JOB PATH RECOMMENDATION
+═══════════════════════════════════════════════════════════════════════════════
+
+Based on assessment scores, system recommends career path:
+
+FYP (Final Year Project) Path:
+✓ For students with strong analytical abilities
+✓ For those preferring research-oriented work
+✓ High GOLEK and Technical scores
+✓ Better learning through projects and experimentation
+✓ Suitable for academia or research roles
+
+JOB (Industry/Employment) Path:
+✓ For students with strong practical skills
+✓ For those preferring hands-on industry experience
+✓ High Strength and Communication scores
+✓ Better learning through real-world applications
+✓ Suitable for corporate jobs and quick career entry
+
+Recommendation Calculation:
+────────────────────────────────────────────────────────────────
+FYP Score = (Analytical × 0.35) + (Technical × 0.35) + 
+            (Learning Style × 0.15) + (Practical × 0.15)
+
+JOB Score = (Practical × 0.35) + (Technical × 0.30) + 
+            (Communication × 0.20) + (Learning Style × 0.15)
+
+Example Output:
+────────────────────────────────────────────────────────────────
+🚀 Recommended Path: FYP (Final Year Project)
+💡 Your analytical and technical aptitude suggests pursuing FYP is suitable.
+   FYP Aptitude: 78.50/100
+   JOB Aptitude: 65.30/100
+────────────────────────────────────────────────────────────────
+
+
+📧 EMAIL CONFIGURATION
+═══════════════════════════════════════════════════════════════════════════════
+1. GMAIL SETUP (Recommended):
+   ────────────────────────────────────────────────────────────────
+   a) Enable 2-Step Verification in your Google Account:
+      - Go to https://myaccount.google.com/
+      - Click "Security" on the left
+      - Enable "2-Step Verification"
+   
+   b) Generate an App Password:
+      - Go to https://myaccount.google.com/apppasswords
+      - Select "Mail" and "Windows Computer"
+      - Copy the 16-character password
+   
+   c) Update backend/backend_logic.py (lines 14-16):
+      
+      EMAIL_USER = os.environ.get("EMAIL_USER", "your-email@gmail.com")
+                                                    ↑ REPLACE WITH YOUR EMAIL
+      EMAIL_PASS = os.environ.get("EMAIL_PASS", "your-app-password")
+                                                    ↑ REPLACE WITH THE 16-CHAR PASSWORD
+
+2. OTHER EMAIL PROVIDERS:
+   ────────────────────────────────────────────────────────────────
+   You can use any SMTP-compatible email service:
+   
+   Provider          SMTP Server           Port    Requires App Password
+   ─────────────────────────────────────────────────────────────────────────
+   Gmail             smtp.gmail.com        587     YES (see above)
+   Outlook           smtp-mail.outlook.com 587     NO (use account password)
+   Yahoo             smtp.mail.yahoo.com   587     YES
+   Zoho              smtp.zoho.com         587     NO
+
+
+3. VERIFICATION:
+   ────────────────────────────────────────────────────────────────
+   After configuring, run:
+   
+   python test_backend.py
+   
+   - Register a test student with your email
+   - Complete the assessment
+   - Check your email inbox for results
+   - Check spam/promotions folder if not found
+
+
+4. ENVIRONMENT VARIABLES (Alternative Method):
+   ────────────────────────────────────────────────────────────────
+   You can also set these as system environment variables:
+   
+   Windows PowerShell:
+   $env:EMAIL_USER = "your-email@gmail.com"
+   $env:EMAIL_PASS = "your-app-password"
+   
+   Then the script will use these instead of the hardcoded values.
+
+
+5. TROUBLESHOOTING:
+   ────────────────────────────────────────────────────────────────
+   Error: "Failed to send email: [Errno -1] _ssl.c:913: The handshake operation timed out"
+   → Check your internet connection or firewall settings
+   
+   Error: "Failed to send email: [Errno 535] ...authentication failed"
+   → Wrong email or password - verify credentials
+   
+   Error: "Failed to send email: [Errno 534] ...Application-specific password required"
+   → Enable 2-Step Verification and generate App Password (Gmail only)
+
+
+EMAIL FLOW:
+═══════════════════════════════════════════════════════════════════════════════
+
+  1. Student registers → Email stored in users_db.csv
+  2. Student takes assessment
+  3. Results computed
+  4. record_and_notify() function:
+     - Saves results to score_summaries.csv
+     - Retrieves student email from database
+     - Formats results in professional email
+     - Sends to student email address
+  5. Student receives email with:
+     - Personalized greeting
+     - Score breakdown by domain
+     - TVET Index and interpretation
+     - Recommended career path
+
+═══════════════════════════════════════════════════════════════════════════════
+Last Updated: March 11, 2026

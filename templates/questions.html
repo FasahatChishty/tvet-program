@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Questions</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+.body{background:#f8fafc;}
+body{background:linear-gradient(180deg,#f8fafc 0%,#eef4ff 100%);color:#0f172a;}
+.main-header{background:#0f172a;color:#fff;box-shadow:0 10px 24px rgba(15,23,42,.18);}
+.main-header .logo,.main-header a{color:#fff;}
+.wrap{max-width:1100px;margin:0 auto;padding:40px 20px;color:#0f172a;}
+.wrap h1{color:#0f172a;margin:0 0 22px;}
+.domain{background:#fff;border-radius:18px;padding:20px;margin-bottom:18px;box-shadow:0 12px 30px rgba(15,23,42,.08);border:1px solid #e2e8f0;}
+.domain h2{color:#0f172a;margin-top:0;}
+.q{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #e5e7eb;color:#0f172a;}
+.q:first-child{border-top:0;}
+form{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;}
+input[type=text], select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;min-width:220px;color:#0f172a;background:#fff;}
+button{padding:10px 14px;border:0;border-radius:10px;background:#111827;color:#fff;cursor:pointer;}
+</style>
+</head>
+<body>
+<header class="main-header">
+  <div class="logo">TVET Admin</div>
+  <nav>
+    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('admin_users') }}">Users</a>
+    <a href="{{ url_for('admin_results') }}">Results</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </nav>
+</header>
+<main class="wrap">
+  <h1>Questions</h1>
+
+  {% for domain in sections %}
+  <section class="domain">
+    <h2>{{ domain }}</h2>
+    {% for question in questions.get(domain, []) %}
+      <div class="q">
+        <span>{{ loop.index }}. {{ question }}</span>
+        <form method="POST" action="{{ url_for('admin_questions') }}">
+          <input type="hidden" name="action" value="delete">
+          <input type="hidden" name="domain" value="{{ domain }}">
+          <input type="hidden" name="index" value="{{ loop.index0 }}">
+          <button type="submit">Delete</button>
+        </form>
+      </div>
+    {% endfor %}
+
+    <form method="POST" action="{{ url_for('admin_questions') }}">
+      <input type="hidden" name="action" value="add">
+      <input type="hidden" name="domain" value="{{ domain }}">
+      <input type="text" name="question" placeholder="Add new question">
+      <button type="submit">Add Question</button>
+    </form>
+  </section>
+  {% endfor %}
+</main>
+</body>
+</html>
